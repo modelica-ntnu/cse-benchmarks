@@ -1,0 +1,15 @@
+Bootstrap: docker
+From: ghcr.io/marco-compiler/marco-prod-debian-12:latest
+
+%post
+    apt update -y
+    apt install -y time nano screen
+
+%environment
+    export PATH="/root/install/marco/bin:$PATH"
+    export SRC_DIR=/data/src
+    export BUILD_DIR=/output/build
+    export LOG_DIR=/output/log
+    export RESULTS_DIR=/output/results
+    export COMPILE_TIMEOUT=7200
+    export SIMULATE_TIMEOUT=7200
