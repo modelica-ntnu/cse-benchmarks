@@ -60,7 +60,7 @@ marco \
   --model=City \
   --solver=$solver \
   -emit-mlir -O2 \
-  --variables-filter="$VAR_FILTER" \
+  --variable-filter="$VAR_FILTER" \
   -Xmarco $cse \
   -o $BUILD_DIR/model.mlir
 
@@ -73,7 +73,7 @@ marco \
   --model=City \
   --solver=$solver \
   -c -emit-llvm -O2 \
-  --variables-filter="$VAR_FILTER" \
+  --variable-filter="$VAR_FILTER" \
   -Xmarco $cse \
   -o $BUILD_DIR/model.bc
 
@@ -109,7 +109,7 @@ do
   --model=ThermalChipSimpleBoundary \
   --solver=$solver \
   -o $BUILD_DIR/simulation-$n-$solver-$cse \
-  --variables-filter="$VAR_FILTER" \
+  --variable-filter="$VAR_FILTER" \
   -Xmarco $cse
 done
 
