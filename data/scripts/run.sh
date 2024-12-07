@@ -21,4 +21,3 @@ rm -rf $BUILD_DIR
 date=$(date +%s)
 tar -czvf /output/run-${date}.tar.gz $LOG_DIR $RESULTS_DIR &> /dev/null
 csv_exporter $LOG_DIR euler-forward > /output/run-${date}-euler-forward.csv
-csv_exporter $LOG_DIR ida > /output/run-${date}-ida.csv
