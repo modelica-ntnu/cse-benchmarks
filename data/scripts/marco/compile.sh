@@ -4,6 +4,7 @@ path=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
 
 n=$1
 solver=$2
+cse=$3
 
 NUM_RUNS=10
 OMC_FLAGS="--baseModelica --newBackend -d=evaluateAllParameters"
@@ -22,7 +23,7 @@ g++ "$path/size_stat.cpp" -o $BUILD_DIR/size_stat
 
 echo "---------------------------------------------"
 echo "Generate Base Modelica"
-OMC_TIMES_FILE=$BUILD_DIR/omc-times_$n-$solver.txt
+OMC_TIMES_FILE=$BUILD_DIR/omc-times_$n-$solver-$cse.txt
 
 for ((i = 0; i <= $NUM_RUNS; i++))
 do
@@ -34,7 +35,7 @@ omc $SRC_DIR/CityLight-$n.mo -i=CityLight.City $OMC_FLAGS 1> $BUILD_DIR/CityLigh
 echo "---------------------------------------------"
 echo "Computing Base Modelica generation time"
 echo "Base Modelica generation time:"
-OMC_TIME_FILE=$LOG_DIR/omc-time_$n-solver.txt
+OMC_TIME_FILE=$LOG_DIR/omc-time_$n-$solver-$cse.txt
 $BUILD_DIR/time_stat $OMC_TIMES_FILE > $OMC_TIME_FILE
 cat $OMC_TIME_FILE
 
@@ -46,8 +47,8 @@ sed -i '1,2d;$d' $BUILD_DIR/CityLight-flat-fixed-$n.mo
 
 echo "---------------------------------------------"
 echo "Generating code sizes"
-MODELICA_DIALECT_SIZES_FILE=$LOG_DIR/bmodelica-sizes_$n-$solver.txt
-LLVMIR_SIZES_FILE=$LOG_DIR/llvmir-sizes_$n-$solver.txt
+MODELICA_DIALECT_SIZES_FILE=$LOG_DIR/bmodelica-sizes_$n-$solver-$cse.txt
+LLVMIR_SIZES_FILE=$LOG_DIR/llvmir-sizes_$n-$solver-$cse.txt
 
 for ((i = 0; i <= $NUM_RUNS; i++))
 do
@@ -60,6 +61,7 @@ marco \
   --solver=$solver \
   -emit-mlir -O2 \
   --variables-filter="$VAR_FILTER" \
+  -Xmarco $cse \
   -o $BUILD_DIR/model.mlir
 
 wc -c $BUILD_DIR/model.mlir >> $MODELICA_DIALECT_SIZES_FILE
@@ -72,6 +74,7 @@ marco \
   --solver=$solver \
   -c -emit-llvm -O2 \
   --variables-filter="$VAR_FILTER" \
+  -Xmarco $cse \
   -o $BUILD_DIR/model.bc
 
 llvm-dis $BUILD_DIR/model.bc -o $BUILD_DIR/model.ll
@@ -82,19 +85,19 @@ echo "---------------------------------------------"
 echo "Computing code sizes"
 echo "------"
 echo "Modelica dialect size:"
-MODELICA_DIALECT_SIZE_FILE=$LOG_DIR/bmodelica-size_$n-$solver.txt
+MODELICA_DIALECT_SIZE_FILE=$LOG_DIR/bmodelica-size_$n-$solver-$cse.txt
 $BUILD_DIR/size_stat $MODELICA_DIALECT_SIZES_FILE > $MODELICA_DIALECT_SIZE_FILE
 cat $MODELICA_DIALECT_SIZE_FILE
 
 echo "------"
 echo "LLVM-IR size:"
-LLVMIR_SIZE_FILE=$LOG_DIR/llvmir-size_$n-$solver.txt
+LLVMIR_SIZE_FILE=$LOG_DIR/llvmir-size_$n-$solver-$cse.txt
 $BUILD_DIR/size_stat $LLVMIR_SIZES_FILE > $LLVMIR_SIZE_FILE
 cat $LLVMIR_SIZE_FILE
 
 echo "---------------------------------------------"
 echo "Build simulation"
-MARCO_COMPILE_TIMES_FILE=$LOG_DIR/marco-compile-times_$n-$solver.txt
+MARCO_COMPILE_TIMES_FILE=$LOG_DIR/marco-compile-times_$n-$solver-$cse.txt
 
 for ((i = 0; i <= $NUM_RUNS; i++))
 do
@@ -105,18 +108,19 @@ do
   --omc-bypass -O2 \
   --model=ThermalChipSimpleBoundary \
   --solver=$solver \
-  -o $BUILD_DIR/simulation-$n-$solver \
-  --variables-filter="$VAR_FILTER"
+  -o $BUILD_DIR/simulation-$n-$solver-$cse \
+  --variables-filter="$VAR_FILTER" \
+  -Xmarco $cse
 done
 
 echo "---------------------------------------------"
 echo "MARCO build time:"
-MARCO_COMPILE_TIME_FILE=$LOG_DIR/marco-compile-time_$n-$solver.txt
+MARCO_COMPILE_TIME_FILE=$LOG_DIR/marco-compile-time_$n-$solver-$cse.txt
 $BUILD_DIR/time_stat $MARCO_COMPILE_TIMES_FILE > $MARCO_COMPILE_TIME_FILE
 cat $MARCO_COMPILE_TIME_FILE
 
 echo "---------------------------------------------"
 echo "Binary size:"
-MARCO_BINARY_SIZE_FILE=$LOG_DIR/marco-binary-size_$n-$solver.txt
-wc -c $BUILD_DIR/simulation-$n-$solver > $MARCO_BINARY_SIZE_FILE
+MARCO_BINARY_SIZE_FILE=$LOG_DIR/marco-binary-size_$n-$solver-$cse.txt
+wc -c $BUILD_DIR/simulation-$n-$solver-$cse > $MARCO_BINARY_SIZE_FILE
 cat $MARCO_BINARY_SIZE_FILE
