@@ -8,7 +8,7 @@ cse=$3
 
 NUM_RUNS=10
 OMC_FLAGS="--baseModelica --newBackend -d=evaluateAllParameters"
-VAR_FILTER="bigHouses.brightHouses.power;bigHouses.almostBrightHouses.power;bigHouses.almostDarkHouses.power;bigHouses.darkHouses.power;smallHouses.brightHouses.power;smallHouses.almostBrightHouses.power;smallHouses.almostDarkHouses.power;smallHouses.darkHouses.power"
+VAR_FILTER="avgBigBrightHouses;avgBigAlmostBrightHouses;avgBigAlmostDarkHouses;avgBigDarkHouses;avgSmallBrightHouses;avgSmallAlmostBrightHouses;avgSmallAlmostDarkHouses;avgSmallDarkHouses"
 
 rm -rf "$BUILD_DIR"
 mkdir -p "$BUILD_DIR"

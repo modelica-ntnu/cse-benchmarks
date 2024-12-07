@@ -77,11 +77,32 @@ package CityLight
   end Block;
 
   model City
-    parameter Modelica.Units.SI.Angle latitude = 68*Modelica.Constants.pi/180;
+    parameter Modelica.Units.SI.Angle latitude = 63.419923*Modelica.Constants.pi/180;
     parameter Modelica.Units.SI.Angle declination = 23*Modelica.Constants.pi/180;
+    
+    output Modelica.Units.SI.Power avgBigBrightHouses;
+    output Modelica.Units.SI.Power avgBigAlmostBrightHouses;
+    output Modelica.Units.SI.Power avgBigAlmostDarkHouses;
+    output Modelica.Units.SI.Power avgBigDarkHouses;
+    
+    output Modelica.Units.SI.Power avgSmallBrightHouses;
+    output Modelica.Units.SI.Power avgSmallAlmostBrightHouses;
+    output Modelica.Units.SI.Power avgSmallAlmostDarkHouses;
+    output Modelica.Units.SI.Power avgSmallDarkHouses;
     
     Block bigHouses(latitude = latitude, declination = declination, windowSize = 5);
     Block smallHouses(latitude = latitude, declination = declination, windowSize = 3);
+    
+  equation
+    avgBigBrightHouses = sum(bigHouses.brightHouses.power) / bigHouses.N;
+    avgBigAlmostBrightHouses = sum(bigHouses.almostBrightHouses.power) / bigHouses.N;
+    avgBigAlmostDarkHouses = sum(bigHouses.almostDarkHouses.power) / bigHouses.N;
+    avgBigDarkHouses = sum(bigHouses.darkHouses.power) / bigHouses.N;
+    
+    avgSmallBrightHouses = sum(smallHouses.brightHouses.power) / smallHouses.N;
+    avgSmallAlmostBrightHouses = sum(smallHouses.almostBrightHouses.power) / smallHouses.N;
+    avgSmallAlmostDarkHouses = sum(smallHouses.almostDarkHouses.power) / smallHouses.N;
+    avgSmallDarkHouses = sum(smallHouses.darkHouses.power) / smallHouses.N;
     
     annotation(
       experiment(StartTime = 0, StopTime = 86400, Tolerance = 1e-06, Interval = 60));
