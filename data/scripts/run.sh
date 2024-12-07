@@ -6,6 +6,8 @@ rm -rf $BUILD_DIR
 rm -rf $LOG_DIR
 rm -rf $RESULTS_DIR
 
+omc "$path/install_modelica_libs.mos"
+
 "$path/marco/run.sh"
 "$path/omc/run.sh"
 

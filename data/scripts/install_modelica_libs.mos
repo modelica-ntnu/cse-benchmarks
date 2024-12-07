@@ -1,0 +1,3 @@
+updatePackageIndex();getErrorString();
+installPackage(Modelica, "3.2.3");getErrorString();
+installPackage(Modelica, "4.0.0");getErrorString();
