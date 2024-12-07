@@ -72,7 +72,7 @@ int main(int argc, char *argv[]) {
 }
 
 bool parse_cOMC(const std::string& logDir, const Config& config, double data[2]);
-bool parse_cOMCFrontend(const std::string& logDir, const Config& config, double data[2][4]);
+bool parse_cOMCFrontend(const std::string& logDir, const Config& config, std::string cse, double data[2][4]);
 bool parse_cMARCOOnly(const std::string& logDir, const Config& config, std::string cse, double data[2][4]);
 bool parse_sMARCO(const std::string& logDir, const Config& config, std::string cse, double data[2]);
 bool parse_sOMC(const std::string& logDir, const Config& config, double data[2]);
@@ -95,16 +95,16 @@ void run(const std::string& logDir, const std::vector<Config>& configs) {
     std::cout << "n,eq,";
 
     std::cout << "[c] OMC - real,";
-    std::cout << "[c] OMC frontend - real - average,[c] MARCO only w/o CSE - real - average,[c] MARCO only w/ CSE- real - average," ;
-    std::cout << "[c] OMC frontend - real - median,[c] MARCO only w/o CSE - real - median,[c] MARCO only w/ CSE - real - median,";
-    std::cout << "[c] OMC frontend - real - min,[c] MARCO only w/o CSE - real - min,[c] MARCO only w/ CSE - real - min,";
-    std::cout << "[c] OMC frontend - real - max,[c] MARCO only w/o CSE - real - max,[c] MARCO only w/ CSE - real - max,";
+    std::cout << "[c] OMC frontend (MARCO w/o CSE) - real - average,[c] OMC frontend (MARCO w/ CSE) - real - average,[c] MARCO only w/o CSE - real - average,[c] MARCO only w/ CSE- real - average," ;
+    std::cout << "[c] OMC frontend (MARCO w/o CSE) - real - median,[c] OMC frontend (MARCO w/ CSE) - real - median,[c] MARCO only w/o CSE - real - median,[c] MARCO only w/ CSE - real - median,";
+    std::cout << "[c] OMC frontend (MARCO w/o CSE) - real - min,[c] OMC frontend (MARCO w/ CSE) - real - min,[c] MARCO only w/o CSE - real - min,[c] MARCO only w/ CSE - real - min,";
+    std::cout << "[c] OMC frontend (MARCO w/o CSE) - real - max,[c] OMC frontend (MARCO w/ CSE) - real - max,[c] MARCO only w/o CSE - real - max,[c] MARCO only w/ CSE - real - max,";
 
     std::cout << "[c] OMC - user,";
-    std::cout << "[c] OMC frontend - user - average,[c] MARCO only w/o CSE - user - average,[c] MARCO only w/ CSE - user - average,";
-    std::cout << "[c] OMC frontend - user - median,[c] MARCO only w/o CSE - user - median,[c] MARCO only w/ CSE - user - median,";
-    std::cout << "[c] OMC frontend - user - min,[c] MARCO only w/o CSE - user - min,[c] MARCO only w/ CSE - user - min,";
-    std::cout << "[c] OMC frontend - user - max,[c] MARCO only w/o CSE - user - max,[c] MARCO only w/ CSE - user - max,";
+    std::cout << "[c] OMC frontend (MARCO w/o CSE) - user - average,[c] OMC frontend (MARCO w/ CSE) - user - average,[c] MARCO only w/o CSE - user - average,[c] MARCO only w/ CSE - user - average,";
+    std::cout << "[c] OMC frontend (MARCO w/o CSE) - user - median,[c] OMC frontend (MARCO w/ CSE) - user - median,[c] MARCO only w/o CSE - user - median,[c] MARCO only w/ CSE - user - median,";
+    std::cout << "[c] OMC frontend (MARCO w/o CSE) - user - min,[c] OMC frontend (MARCO w/ CSE) - user - min,[c] MARCO only w/o CSE - user - min,[c] MARCO only w/ CSE - user - min,";
+    std::cout << "[c] OMC frontend (MARCO w/o CSE) - user - max,[c] OMC frontend (MARCO w/ CSE) - user - max,[c] MARCO only w/o CSE - user - max,[c] MARCO only w/ CSE - user - max,";
 
     std::cout << "[s] MARCO w/o CSE - real,[s] MARCO w/ CSE - real,[s] OMC - real,";
     std::cout << "[s] MARCO w/o CSE - user,[s] MARCO w/ CSE - user,[s] OMC - user,";
@@ -119,12 +119,13 @@ void run(const std::string& logDir, const std::vector<Config>& configs) {
 
     for (const Config& config : configs) {
         double cOMC[2];
-        double cOMCFrontend[2][4], cMARCOOnly[2][2][4];
+        double cOMCFrontend[2][2][4], cMARCOOnly[2][2][4];
         double sMARCO[2][2], sOMC[2];
         long long int csMARCObmodelica[2][4], csMARCOLLVMIR[2][4], csMARCOBinary[2], csOMCC, csOMCBinary;
 
         parse_cOMC(logDir, config, cOMC);
-        parse_cOMCFrontend(logDir, config, cOMCFrontend);
+        parse_cOMCFrontend(logDir, config, "-function-calls-cse", cOMCFrontend[0]);
+        parse_cOMCFrontend(logDir, config, "-no-function-calls-cse", cOMCFrontend[1]);
         parse_cMARCOOnly(logDir, config, "-function-calls-cse", cMARCOOnly[0]);
         parse_cMARCOOnly(logDir, config, "-no-function-calls-cse", cMARCOOnly[1]);
         parse_sMARCO(logDir, config, "-function-calls-cse", sMARCO[0]);
@@ -143,37 +144,45 @@ void run(const std::string& logDir, const std::vector<Config>& configs) {
 
         printValue(std::cout, cOMC[0]);
 
-        printValue(std::cout, cOMCFrontend[0][0]);
+        printValue(std::cout, cOMCFrontend[0][0][0]);
+        printValue(std::cout, cOMCFrontend[1][0][0]);
         printValue(std::cout, cMARCOOnly[0][0][0]);
         printValue(std::cout, cMARCOOnly[1][0][0]);
 
-        printValue(std::cout, cOMCFrontend[0][1]);
+        printValue(std::cout, cOMCFrontend[0][0][1]);
+        printValue(std::cout, cOMCFrontend[1][0][1]);
         printValue(std::cout, cMARCOOnly[0][0][1]);
         printValue(std::cout, cMARCOOnly[1][0][1]);
 
-        printValue(std::cout, cOMCFrontend[0][2]);
+        printValue(std::cout, cOMCFrontend[0][0][2]);
+        printValue(std::cout, cOMCFrontend[1][0][2]);
         printValue(std::cout, cMARCOOnly[0][0][2]);
         printValue(std::cout, cMARCOOnly[1][0][2]);
 
-        printValue(std::cout, cOMCFrontend[0][3]);
+        printValue(std::cout, cOMCFrontend[0][0][3]);
+        printValue(std::cout, cOMCFrontend[1][0][3]);
         printValue(std::cout, cMARCOOnly[0][0][3]);
         printValue(std::cout, cMARCOOnly[1][0][3]);
 
         printValue(std::cout, cOMC[1]);
 
-        printValue(std::cout, cOMCFrontend[1][0]);
+        printValue(std::cout, cOMCFrontend[0][1][0]);
+        printValue(std::cout, cOMCFrontend[1][1][0]);
         printValue(std::cout, cMARCOOnly[0][1][0]);
         printValue(std::cout, cMARCOOnly[1][1][0]);
 
-        printValue(std::cout, cOMCFrontend[1][1]);
+        printValue(std::cout, cOMCFrontend[0][1][1]);
+        printValue(std::cout, cOMCFrontend[1][1][1]);
         printValue(std::cout, cMARCOOnly[0][1][1]);
         printValue(std::cout, cMARCOOnly[1][1][1]);
 
-        printValue(std::cout, cOMCFrontend[1][2]);
+        printValue(std::cout, cOMCFrontend[0][1][2]);
+        printValue(std::cout, cOMCFrontend[1][1][2]);
         printValue(std::cout, cMARCOOnly[0][1][2]);
         printValue(std::cout, cMARCOOnly[1][1][2]);
 
-        printValue(std::cout, cOMCFrontend[1][3]);
+        printValue(std::cout, cOMCFrontend[0][1][3]);
+        printValue(std::cout, cOMCFrontend[1][1][3]);
         printValue(std::cout, cMARCOOnly[0][1][3]);
         printValue(std::cout, cMARCOOnly[1][1][3]);
 
@@ -279,8 +288,8 @@ bool parse_cOMC(const std::string& logDir, const Config& config, double data[2])
     return true;
 }
 
-bool parse_cOMCFrontend(const std::string& logDir, const Config& config, double data[2][4]) {
-    std::string filePath = logDir + "/marco/omc-time_" + getConfigString(config) + ".txt";
+bool parse_cOMCFrontend(const std::string& logDir, const Config& config, std::string cse, double data[2][4]) {
+    std::string filePath = logDir + "/marco/omc-time_" + getConfigString(config) + "-" + cse + ".txt";
     FILE* f = fopen(filePath.c_str(), "r");
 
     if (!f) {
