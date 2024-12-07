@@ -6,7 +6,7 @@ From: ghcr.io/marco-compiler/marco-prod-debian-12:latest
     apt install -y time nano screen
 
 %environment
-    export PATH="/root/install/marco/bin:$PATH"
+    export PATH="/root/install/marco/bin:/root/install/csv_exporter/bin:$PATH"
     export SRC_DIR=/data/src
     export BUILD_DIR=/output/build
     export LOG_DIR=/output/log

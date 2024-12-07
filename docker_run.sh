@@ -8,6 +8,7 @@ mkdir -p "$path/output"
 docker run --rm \
 	-v "$path/data":/data \
 	-v "$path/marco":/tmp/marco-src \
+	-v "$path/csv_exporter":/tmp/csv_exporter-src \
 	-v "$path/output":/output \
 	-e COMPILE_TIMEOUT=1200 \
 	-e SIMULATE_TIMEOUT=3600 \
