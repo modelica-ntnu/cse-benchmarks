@@ -61,7 +61,7 @@ marco \
   --solver=$solver \
   -emit-mlir -O2 \
   --variable-filter="$VAR_FILTER" \
-  -Xmarco $cse \
+  $cse \
   -o $BUILD_DIR/model.mlir
 
 wc -c $BUILD_DIR/model.mlir >> $MODELICA_DIALECT_SIZES_FILE
