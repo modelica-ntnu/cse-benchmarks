@@ -14,6 +14,9 @@ omc "$path/install_modelica_libs.mos"
 echo "MARCO version"
 marco --version
 
+echo "OMC version"
+omc --version
+
 rm -rf $BUILD_DIR
 date=$(date +%s)
 tar -czvf /output/run-${date}.tar.gz $LOG_DIR $RESULTS_DIR &> /dev/null
