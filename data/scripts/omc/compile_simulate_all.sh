@@ -5,6 +5,7 @@ path=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
 solver=$1
 sim_args=${@:2}
 
+"$path/compile_simulate_config.sh" 4 $solver || exit 1
 "$path/compile_simulate_config.sh" 8 $solver || exit 1
 "$path/compile_simulate_config.sh" 16 $solver || exit 1
 "$path/compile_simulate_config.sh" 32 $solver || exit 1
