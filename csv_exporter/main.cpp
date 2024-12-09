@@ -259,10 +259,10 @@ TimeMeasure parseTimeMeasure(FILE* f) {
 SizeStatistics parseSizeStatistics(FILE* f) {
     SizeStatistics result;
 
-    fscanf(f, " Average: %lld", &result.average);
-    fscanf(f, " Median: %lld", &result.median);
-    fscanf(f, " Min: %lld", &result.min);
-    fscanf(f, " Max: %lld", &result.max);
+    fscanf(f, " Average: %lf", &result.average);
+    fscanf(f, " Median: %lf", &result.median);
+    fscanf(f, " Min: %lf", &result.min);
+    fscanf(f, " Max: %lf", &result.max);
 
     return result;
 }
@@ -445,7 +445,7 @@ bool parse_csMARCOBinary(const std::string& logDir, const Config& config, std::s
         return false;
     }
 
-    fscanf(f, "%lld", &data);
+    fscanf(f, "%lf", &data);
     fclose(f);
     return true;
 }
@@ -459,7 +459,7 @@ bool parse_csOMCC(const std::string& logDir, const Config& config, double& data)
         return false;
     }
 
-    fscanf(f, "%lld", &data);
+    fscanf(f, "%lf", &data);
     fclose(f);
     return true;
 }
@@ -473,7 +473,7 @@ bool parse_csOMCBinary(const std::string& logDir, const Config& config, double& 
         return false;
     }
 
-    fscanf(f, "%lld", &data);
+    fscanf(f, "%lf", &data);
     fclose(f);
     return true;
 }
