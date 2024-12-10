@@ -7,7 +7,7 @@ solver=$2
 cse=$3
 
 NUM_RUNS=10
-OMC_FLAGS="--baseModelica --newBackend -d=evaluateAllParameters"
+OMC_FLAGS="--baseModelica -d=nonfScalarize,arrayConnect,combineSubscripts,evaluateAllParameters,vectorizeBindings"
 VAR_FILTER="avgBigBrightHouses;avgBigAlmostBrightHouses;avgBigAlmostDarkHouses;avgBigDarkHouses;avgSmallBrightHouses;avgSmallAlmostBrightHouses;avgSmallAlmostDarkHouses;avgSmallDarkHouses"
 
 rm -rf "$BUILD_DIR"
