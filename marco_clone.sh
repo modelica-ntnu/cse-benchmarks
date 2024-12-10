@@ -6,5 +6,5 @@ rm -rf "$path/marco"
 mkdir -p "$path/marco"
 git clone https://github.com/marco-compiler/marco.git "$path/marco"
 cd "$path/marco"
-git checkout arrangabriel/array-aware-call-cse
+git checkout master
 cd - &> /dev/null
