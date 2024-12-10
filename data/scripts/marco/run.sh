@@ -9,5 +9,5 @@ mkdir -p $BUILD_DIR
 mkdir -p $LOG_DIR
 mkdir -p $RESULTS_DIR
 
-"$path/compile_simulate_all.sh" euler-forward -function-calls-cse ---time-step=1440 --end-time=86400
-"$path/compile_simulate_all.sh" euler-forward -no-function-calls-cse --time-step=1440 --end-time=86400
+"$path/compile_simulate_all.sh" euler-forward -function-calls-cse ---time-step=60 --end-time=86400
+"$path/compile_simulate_all.sh" euler-forward -no-function-calls-cse --time-step=60 --end-time=86400
