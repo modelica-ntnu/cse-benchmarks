@@ -7,7 +7,7 @@ struct Config {
     int equations;
     std::string solver;
 
-    Config(int n, std::string solver) : n(n), equations(16*n), solver(std::move(solver)) {
+    Config(int n, std::string solver) : n(n), equations(16*n + 8), solver(std::move(solver)) {
     }
 };
 
