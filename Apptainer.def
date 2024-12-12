@@ -7,7 +7,7 @@ From: ghcr.io/marco-compiler/marco-prod-debian-12:latest
 
 %environment
     export PATH="/root/install/marco/bin:/root/install/csv_exporter/bin:$PATH"
-    export SRC_DIR=/data/src
+    export SRC_DIR=/data/src/configs
     export BUILD_DIR=/output/build
     export LOG_DIR=/output/log
     export RESULTS_DIR=/output/results
