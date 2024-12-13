@@ -10,7 +10,7 @@ docker run --rm \
 	-v "$path/marco":/tmp/marco-src \
 	-v "$path/csv_exporter":/tmp/csv_exporter-src \
 	-v "$path/output":/output \
-	-e COMPILE_TIMEOUT=1200 \
-	-e SIMULATE_TIMEOUT=3600 \
+	-e COMPILE_TIMEOUT=18000 \
+	-e SIMULATE_TIMEOUT=18000 \
 	marco-benchmarks \
 	bash -c "/data/run.sh"

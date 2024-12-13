@@ -11,5 +11,5 @@ From: ghcr.io/marco-compiler/marco-prod-debian-12:latest
     export BUILD_DIR=/output/build
     export LOG_DIR=/output/log
     export RESULTS_DIR=/output/results
-    export COMPILE_TIMEOUT=7200
-    export SIMULATE_TIMEOUT=7200
+    export COMPILE_TIMEOUT=18000
+    export SIMULATE_TIMEOUT=18000

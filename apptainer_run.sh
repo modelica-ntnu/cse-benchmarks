@@ -13,7 +13,7 @@ apptainer exec \
 	--bind "$path/csv_exporter":/tmp/csv_exporter-src \
 	--bind "$path/output":/output \
 	--bind "$path/root":/root \
-	--env COMPILE_TIMEOUT=7200 \
-	--env SIMULATE_TIMEOUT=7200 \
+	--env COMPILE_TIMEOUT=18000 \
+	--env SIMULATE_TIMEOUT=18000 \
 	marco-benchmarks.sif \
 	bash -c /data/run.sh
